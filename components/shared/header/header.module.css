@@ -1,0 +1,43 @@
+.medicineStoreLink,
+.medicineStoreLinkVertical {
+  position: relative;
+}
+
+/* Ліворуч та праворуч */
+.medicineStoreLink::before,
+.medicineStoreLink::after {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background-color: white;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.medicineStoreLink::before {
+  left: -18px;
+}
+
+.medicineStoreLink::after {
+  right: -18px;
+}
+
+.medicineStoreLinkVertical::before,
+.medicineStoreLinkVertical::after {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background-color: white;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.medicineStoreLinkVertical::before {
+  top: -18px;
+}
+
+.medicineStoreLinkVertical::after {
+  bottom: -18px;
+}
