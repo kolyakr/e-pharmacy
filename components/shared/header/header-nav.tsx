@@ -1,27 +1,12 @@
 "use client";
 
-import { linksName } from "@/constants";
+import { links, linksName } from "@/constants";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import React from "react";
 import styles from "./header.module.css";
 import { usePathname } from "next/navigation";
 import { SheetClose } from "@/components/ui/sheet";
-
-const links = [
-  {
-    name: linksName.HOME,
-    href: "/",
-  },
-  {
-    name: linksName.MEDICINE_STORE,
-    href: "/medicine-store",
-  },
-  {
-    name: linksName.MEDICINE,
-    href: "/medicine",
-  },
-];
 
 type Type = "row" | "column";
 
