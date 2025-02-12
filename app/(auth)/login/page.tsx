@@ -1,7 +1,20 @@
+import { Metadata } from "next";
 import React from "react";
+import AuthForm from "../auth-form";
+import { auth } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
-const Login = () => {
-  return <div>Login</div>;
+export const metadata: Metadata = {
+  title: "Log in",
 };
 
-export default Login;
+const LoginPage = async () => {
+  const session = await auth();
+  if (session) {
+    redirect("/");
+  }
+
+  return <AuthForm type="login" />;
+};
+
+export default LoginPage;

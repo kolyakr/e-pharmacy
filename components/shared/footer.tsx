@@ -4,6 +4,8 @@ import { links } from "@/constants";
 import Link from "next/link";
 
 const Footer = () => {
+  const year = new Date().getFullYear();
+
   return (
     <footer className="w-full bg-greenColor">
       <div className="w-full max-w-7x wrapper">
@@ -29,7 +31,7 @@ const Footer = () => {
         </div>
         <div className="flex justify-center items-center pt-[40px]">
           <div className="text-xs text-whiteColor">
-            © E-Pharmacy 2023. All Rights Reserved | Privacy Policy | Terms &
+            © E-Pharmacy {year}. All Rights Reserved | Privacy Policy | Terms &
             Conditions
           </div>
         </div>

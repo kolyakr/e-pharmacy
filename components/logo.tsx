@@ -1,19 +1,31 @@
 import { APP_NAME } from "@/constants";
+import { cn } from "@/lib/utils";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
-const Logo = () => {
+type Type = "white" | "green";
+
+const Logo = ({ type = "white" }: { type?: Type }) => {
   return (
-    <div className="flex gap-3 items-center">
+    <Link href="/" className="flex gap-3 items-center">
       <Image
-        src="/images/white-icon.svg"
+        src={`/images/${type}-icon.svg`}
         alt={`${APP_NAME} logo}`}
         width={44}
         height={44}
         priority={true}
       />
-      <p className="text-whiteColor font-bold">E-Pharmacy</p>
-    </div>
+      <p
+        className={cn(
+          "font-bold",
+          { "text-whiteColor": type === "white" },
+          { "text-blackColor": type === "green" }
+        )}
+      >
+        E-Pharmacy
+      </p>
+    </Link>
   );
 };
 
