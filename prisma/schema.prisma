@@ -7,19 +7,40 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  USER
+  ADMIN
+  CUSTOMER
+}
+
 model User {
-  id            String    @id @default(cuid())
-  name          String
-  email         String    @unique
-  emailVerified DateTime?
-  password      String
-  image         String?
-  phoneNumber   String
-  accounts      Account[]
-  sessions      Session[]
+  id          String  @id @default(cuid())
+  name        String
+  email       String  @unique
+  password    String
+  phoneNumber String
+  role        Role    @default(USER)
+  image       String?
+
+  customer Customer?
+
+  accounts Account[]
+  sessions Session[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Customer {
+  id           String   @id @default(cuid())
+  userId       String   @unique
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  address      String?
+  spent        Decimal  @default("0")
+  registerDate DateTime @default(now())
+
+  orders  Order[]
+  reviews Review[]
 }
 
 model Account {
@@ -59,4 +80,66 @@ model VerificationToken {
   expires    DateTime
 
   @@id([identifier, token])
+}
+
+model Supplier {
+  suppliers String   @id
+  name      String
+  address   String
+  date      DateTime
+  amount    Decimal
+  status    String
+  createdAt DateTime @default(now())
+
+  products Product[]
+}
+
+model Order {
+  id         String   @id @default(cuid())
+  name       String
+  address    String
+  products   Int
+  photo      String?
+  price      Decimal
+  status     String
+  order_date DateTime
+
+  customerId String?
+  Customer   Customer? @relation(fields: [customerId], references: [id], onDelete: SetNull)
+}
+
+model Product {
+  id        String   @id @default(cuid())
+  name      String
+  photo     String
+  suppliers String
+  Suppliers Supplier @relation(fields: [suppliers], references: [suppliers], onDelete: Cascade)
+  stock     Int
+  price     Decimal
+  category  String
+}
+
+model IncomeExpense {
+  id     String  @id @default(cuid())
+  amount Decimal
+  name   String
+  type   String
+}
+
+model Pharmacy {
+  id      String @id @default(cuid())
+  name    String
+  address String
+  city    String
+  phone   String
+  rating  Int
+}
+
+model Review {
+  id          String   @id @default(cuid())
+  name        String
+  testimonial String
+  createdAt   DateTime @default(now())
+  customerId  String
+  customer    Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
 }

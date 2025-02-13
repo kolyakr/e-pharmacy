@@ -1,7 +1,7 @@
 import { v4 as uuid } from "uuid";
 import prisma from "@/db/db";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import NextAuth, { User } from "next-auth";
+import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
 
@@ -48,14 +48,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     strategy: "jwt",
   },
   callbacks: {
-    async jwt({
-      token,
-      user,
-    }: {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      token: any;
-      user?: User & { phoneNumber?: string };
-    }) {
+    async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
         token.email = user.email;
@@ -64,8 +57,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       }
       return token;
     },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    async session({ session, token }: { session: any; token: any }) {
+    async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string;
         session.user.email = token.email as string;
@@ -79,6 +71,15 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     async encode({ token }) {
       if (!token?.id) {
         throw new Error("Invalid token: missing user ID");
+      }
+
+      const session = await prisma.session.findFirst({
+        where: { userId: token.id },
+        orderBy: { expires: "desc" },
+      });
+
+      if (session) {
+        return session.sessionToken;
       }
 
       const sessionToken = uuid();

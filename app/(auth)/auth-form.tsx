@@ -35,6 +35,7 @@ const AuthForm = ({ type }: { type: Type }) => {
   const { toast } = useToast();
 
   useEffect(() => {
+    console.log("state: ", state);
     if (state.message && state.message !== "" && state.success) {
       toast({
         title: state.message,
@@ -48,7 +49,9 @@ const AuthForm = ({ type }: { type: Type }) => {
         variant: "destructive",
       });
     }
-  }, [toast, state]);
+
+    console.log("state: ", state);
+  }, [state]);
 
   return (
     <form

@@ -4,6 +4,7 @@ import { signIn, signOut } from "../auth";
 import { loginUserSchema, registerUserSchema } from "../validator";
 import prisma from "@/db/db";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
+import { formatError } from "../utils";
 
 export const loginUser = async (previousState: unknown, formData: FormData) => {
   try {
@@ -49,6 +50,19 @@ export const registerUser = async (
       throw new Error("User not created");
     }
 
+    if (user.id && user.role === "USER") {
+      await prisma.customer.create({
+        data: {
+          user: {
+            connect: {
+              id: user.id,
+            },
+          },
+          address: "",
+        },
+      });
+    }
+
     await signIn("credentials", {
       email: user.email,
       password: data.password,
@@ -58,17 +72,10 @@ export const registerUser = async (
   } catch (error) {
     if (isRedirectError(error)) throw error;
 
-    return { success: false, message: "Registration failed" };
+    return { success: false, message: formatError(error) };
   }
 };
 
 export const logoutUser = async () => {
-  try {
-    await signOut();
-    return { success: true, message: "Logout successful" };
-  } catch (error) {
-    if (isRedirectError(error)) throw error;
-
-    return { success: false, message: "Logout failed" };
-  }
+  await signOut();
 };
