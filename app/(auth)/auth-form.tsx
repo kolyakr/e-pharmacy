@@ -6,6 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 import { loginUser, registerUser } from "@/lib/actions/user.actions";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import React, { useActionState, useEffect } from "react";
 import { useFormStatus } from "react-dom";
 
@@ -33,6 +34,9 @@ const AuthForm = ({ type }: { type: Type }) => {
   const authAction = type === "register" ? registerUser : loginUser;
   const [state, action] = useActionState(authAction, INITIAL_ACTION_STATE);
   const { toast } = useToast();
+  const searchParams = useSearchParams();
+
+  const callbackUrl = searchParams.get("callbackUrl") || "";
 
   useEffect(() => {
     console.log("state: ", state);
@@ -51,7 +55,7 @@ const AuthForm = ({ type }: { type: Type }) => {
     }
 
     console.log("state: ", state);
-  }, [state]);
+  }, [state, toast]);
 
   return (
     <form
@@ -64,6 +68,7 @@ const AuthForm = ({ type }: { type: Type }) => {
           "md: max-w-[323px]": type === "login",
         })}
       >
+        <input type="hidden" name="callbackUrl" value={callbackUrl} />
         {type === "register" && (
           <input
             className="py-[13px] pl-[18px] rounded-full border border-grayColor text-xs"

@@ -28,7 +28,7 @@ const HeaderCart = async ({ type = "white" }: { type?: Type }) => {
           { "bg-greenWhiteColor": type === "green" }
         )}
       >
-        {session?.user.name?.charAt(0).toUpperCase()}
+        {session && session?.user?.name?.charAt(0).toUpperCase()}
       </div>
     </div>
   );

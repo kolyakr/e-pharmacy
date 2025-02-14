@@ -5,7 +5,7 @@ import Image from "next/image";
 
 const Reviews = () => {
   return (
-    <div className="flex flex-col gap-16">
+    <div className="flex flex-col gap-16 mb-[120px]">
       <SectionHeader
         title="Reviews"
         description="Search for Medicine, Filter by your location"

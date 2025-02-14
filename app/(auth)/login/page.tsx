@@ -8,10 +8,16 @@ export const metadata: Metadata = {
   title: "Log in",
 };
 
-const LoginPage = async () => {
+const LoginPage = async ({
+  searchParams,
+}: {
+  searchParams: Promise<{ callbackUrl: string }>;
+}) => {
+  const { callbackUrl } = await searchParams;
+
   const session = await auth();
   if (session) {
-    redirect("/");
+    redirect(callbackUrl || "/");
   }
 
   return <AuthForm type="login" />;

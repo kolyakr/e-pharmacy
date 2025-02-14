@@ -3,13 +3,9 @@ import MainBanner from "@/components/shared/home/main-banner";
 import MedicineStores from "@/components/shared/home/medicine-stores";
 import PromoBanners from "@/components/shared/home/promo-banners";
 import Reviews from "@/components/shared/home/reviews";
-import { auth } from "@/lib/auth";
 import React from "react";
 
-const HomePage = async () => {
-  const session = await auth();
-  console.log(session);
-
+const HomePage = () => {
   return (
     <div>
       <div className="bg-greenColor w-full flex align-center justify-center ">
