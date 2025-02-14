@@ -101,3 +101,32 @@
     @apply bg-background text-foreground;
   }
 }
+
+@keyframes scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 768px) {
+  .scroll-container {
+    overflow: hidden;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+  }
+
+  .scroll-list {
+    display: flex;
+    gap: 10px;
+    animation: scroll 10s linear infinite;
+  }
+
+  .scroll-list > * {
+    flex-shrink: 0;
+    min-width: max-content;
+  }
+}

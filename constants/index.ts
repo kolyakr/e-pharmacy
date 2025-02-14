@@ -28,3 +28,52 @@ export const INITIAL_ACTION_STATE = {
   success: false,
   message: "",
 };
+
+export const promoBanners = [
+  {
+    name: "Huge Sale",
+    sale: "70%",
+    linkText: "Shop now",
+    href: "/",
+  },
+  {
+    name: "Secure delivery",
+    sale: "100%",
+    linkText: "Read more",
+    href: "/",
+  },
+  {
+    name: "Off",
+    sale: "35%",
+    linkText: "Shop now",
+    href: "/",
+  },
+];
+
+export const NEAREST_PHARMACIES_LIMIT = 6;
+
+export const sectionFeatures = [
+  "Take user orders form online",
+  "Create your shop profile",
+  "Manage your store",
+  "Get more orders",
+  "Storage shed",
+];
+
+export const reviews = [
+  {
+    src: "/images/user-1.png",
+    name: "Maria Tkachuk",
+    text: "I recently used this medical platform to book an appointment with a specialist, and I was impressed by how easy and user-friendly the process was. Highly recommended!",
+  },
+  {
+    src: "/images/user-2.png",
+    name: "Sergey Rybachok",
+    text: "I had a great experience using this medical platform to access my health records. This platform is a game-changer for managing my healthcare needs.",
+  },
+  {
+    src: "/images/user-3.png",
+    name: "Natalia Chatuk",
+    text: "I recently had a virtual appointment with my doctor through this medical platform, and I was pleasantly surprised by how seamless the experience was. ",
+  },
+];

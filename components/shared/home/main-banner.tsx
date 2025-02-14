@@ -3,7 +3,7 @@ import React from "react";
 
 const MainBanner = () => {
   return (
-    <div className="wrapper flex items-center justify-center w-full">
+    <section className="wrapper flex items-center justify-center w-full">
       <div className="relative min-w-[331px] min-h-[312px] max-w-[476px] max-h-[322px] w-full h-auto aspect-[749/508]  md:min-w-[704px] md:min-h-[508px] mb-[221px] mt-[172px] md:mb-[230px] md:mt-[158px]">
         <Image
           src="/images/main-banner.png"
@@ -21,7 +21,7 @@ const MainBanner = () => {
           Say goodbye to all your healthcare worries with us
         </p>
       </div>
-    </div>
+    </section>
   );
 };
 
