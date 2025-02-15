@@ -1,3 +1,5 @@
+import { PAGINATION_VISIBLE_BUTTONS } from "@/constants";
+import { PaginationParams } from "@/types";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -29,3 +31,41 @@ export function formatError(error: any): string {
       : JSON.stringify(error.message);
   }
 }
+
+export const createPagesList = (currPage: number, maxPage: number) => {
+  let startPage = Math.max(1, currPage - 1);
+  const endPage = Math.min(maxPage, startPage + PAGINATION_VISIBLE_BUTTONS - 1);
+
+  if (endPage - startPage + 1 < PAGINATION_VISIBLE_BUTTONS) {
+    startPage = Math.max(1, endPage - PAGINATION_VISIBLE_BUTTONS + 1);
+  }
+
+  return Array.from(
+    { length: endPage - startPage + 1 },
+    (_, i) => startPage + i
+  );
+};
+
+export const parsePaginationParams = (
+  page: unknown,
+  perPage: unknown,
+  defaultPerPage: number
+): PaginationParams => {
+  const parsedPage = parseStringToNumber(page);
+  const parsedPerPage = parseStringToNumber(perPage);
+
+  return {
+    page: parsedPage ?? 1,
+    perPage: parsedPerPage ?? defaultPerPage,
+  };
+};
+
+export const parseStringToNumber = (unknown: unknown) => {
+  if (typeof unknown !== "string") {
+    return undefined;
+  }
+
+  const number = parseInt(unknown, 10);
+
+  return isNaN(number) ? undefined : number;
+};

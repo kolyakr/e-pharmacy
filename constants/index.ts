@@ -77,3 +77,6 @@ export const reviews = [
     text: "I recently had a virtual appointment with my doctor through this medical platform, and I was pleasantly surprised by how seamless the experience was. ",
   },
 ];
+
+export const PAGINATION_VISIBLE_BUTTONS = 3;
+export const PHARMACIES_PER_PAGE = 9;
