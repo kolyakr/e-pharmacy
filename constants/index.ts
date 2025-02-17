@@ -80,3 +80,14 @@ export const reviews = [
 
 export const PAGINATION_VISIBLE_BUTTONS = 3;
 export const PHARMACIES_PER_PAGE = 9;
+export const PRODUCTS_PER_PAGE = 12;
+
+export const productCategory = [
+  "Medicine",
+  "Heart",
+  "Head",
+  "Hand",
+  "Leg",
+  "Dental Care",
+  "Skin Care",
+];

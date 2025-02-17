@@ -1,4 +1,4 @@
-import { PAGINATION_VISIBLE_BUTTONS } from "@/constants";
+import { PAGINATION_VISIBLE_BUTTONS, productCategory } from "@/constants";
 import { PaginationParams } from "@/types";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -68,4 +68,22 @@ export const parseStringToNumber = (unknown: unknown) => {
   const number = parseInt(unknown, 10);
 
   return isNaN(number) ? undefined : number;
+};
+
+export const parseFilterParams = (category: unknown, name: unknown) => {
+  let parsedCategory = null;
+  let parsedName = null;
+
+  if (category && typeof category === "string") {
+    parsedCategory = productCategory.includes(category) ? category : null;
+  }
+
+  if (name && typeof name === "string") {
+    parsedName = name;
+  }
+
+  return {
+    name: parsedName,
+    category: parsedCategory,
+  };
 };
