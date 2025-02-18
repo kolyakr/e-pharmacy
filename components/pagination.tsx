@@ -111,6 +111,10 @@ const Pagination = ({ count, take }: { count: number; take: number }) => {
     router.push(`?${params.toString()}`, { scroll: false });
   }, [currPage, allPages, isSmallScreen, searchParams, router, take]);
 
+  if (count <= take) {
+    return null;
+  }
+
   return (
     <div className="flex justify-center items-center gap-[17px]">
       <div className="flex gap-1 items-center">

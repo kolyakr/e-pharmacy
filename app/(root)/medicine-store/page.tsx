@@ -18,11 +18,11 @@ const MedicineStorePage = async ({
   );
   const skip = page === 1 ? 1 : (page - 1) * perPage;
 
-  const pharmaciesCount = await prisma.pharmacy.count();
   const pharmacies = await prisma.pharmacy.findMany({
     skip: skip,
     take: perPage,
   });
+  const pharmaciesCount = await prisma.pharmacy.count();
 
   return (
     <div className="wrapper">
@@ -37,7 +37,9 @@ const MedicineStorePage = async ({
             </li>
           ))
         ) : (
-          <p>Pharmacies not found</p>
+          <p className="font-[600] text-[24px] leading-[30px] mb-10 ">
+            Pharmacies not found
+          </p>
         )}
       </ul>
       {pharmacies && pharmacies.length > 0 && (

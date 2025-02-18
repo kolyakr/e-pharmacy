@@ -1,3 +1,4 @@
+import Ellipsis from "@/components/ellipsis";
 import { Button } from "@/components/ui/button";
 import { Product } from "@/types";
 import Image from "next/image";
@@ -9,7 +10,7 @@ const MedicineProduct = ({ product }: { product: Product }) => {
     <div className="flex flex-col justify-between gap-2 max-w-[335px] xl:max-w-[280px]">
       <div>
         <Image
-          src={product.photo}
+          src="/images/white-round-pill.png"
           alt={product.name}
           width={335}
           height={300}
@@ -19,9 +20,11 @@ const MedicineProduct = ({ product }: { product: Product }) => {
       <div className="flex flex-col p-5 border rounded-[20px] gap-[17px]">
         <div className="flex align-start justify-between">
           <div className="flex flex-col">
-            <p className="font-[600] text-[16px] leading-[22px] md:text-[18px] md:leading-[25px]">
-              {product.name}
-            </p>
+            <Ellipsis
+              className="font-[600] text-[16px] leading-[22px] md:text-[18px] md:leading-[25px]"
+              text={product.name}
+              length={15}
+            />
             <p className="font-[400] text-[12px] leading-[22px] md:leading-[18px] text-[#1D1E2199]">
               {product.category}
             </p>

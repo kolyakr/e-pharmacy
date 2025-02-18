@@ -4,19 +4,23 @@ import MedicineProduct from "@/components/shared/medicine/medicine-product";
 import { PRODUCTS_PER_PAGE } from "@/constants";
 import prisma from "@/db/db";
 import { parseFilterParams, parsePaginationParams } from "@/lib/utils";
+import { redirect } from "next/navigation";
 import React from "react";
+
+export const revalidate = 60;
 
 const MedicinePage = async ({
   searchParams,
 }: {
   searchParams: Promise<{
-    category: string;
-    name: string;
-    page: string;
-    perPage: string;
+    category?: string;
+    name?: string;
+    page?: string;
+    perPage?: string;
   }>;
 }) => {
   const urlSearchParams = await searchParams;
+
   const { category, name } = parseFilterParams(
     urlSearchParams.category,
     urlSearchParams.name
@@ -27,12 +31,33 @@ const MedicinePage = async ({
     PRODUCTS_PER_PAGE
   );
 
-  const count = await prisma.product.count();
-  const products = await prisma.product.findMany({
-    take: perPage,
-    skip: page,
-    where: category ? { category } : {},
-  });
+  const [products, count] = await prisma.$transaction([
+    prisma.product.findMany({
+      take: perPage,
+      skip: page > 1 ? (page - 1) * perPage : 0,
+      where: {
+        ...(category ? { category } : {}),
+        ...(name ? { name: { contains: name, mode: "insensitive" } } : {}),
+      },
+    }),
+    prisma.product.count({
+      where: {
+        ...(category ? { category } : {}),
+        ...(name ? { name: { contains: name, mode: "insensitive" } } : {}),
+      },
+    }),
+  ]);
+
+  if (count <= perPage && (urlSearchParams.page || urlSearchParams.perPage)) {
+    const queryParams = new URLSearchParams();
+    if (category) queryParams.set("category", category);
+    if (name) queryParams.set("name", name);
+
+    const newUrl = `/medicine${
+      queryParams.toString() ? `?${queryParams.toString()}` : ""
+    }`;
+    redirect(newUrl);
+  }
 
   return (
     <div className="wrapper">
@@ -41,7 +66,7 @@ const MedicinePage = async ({
       </h2>
       <MedicineFilter />
       <>
-        {products && products.length > 0 ? (
+        {products.length > 0 ? (
           <ul className="grid grid-cols-1 gap-5 place-items-center md:grid-cols-3 xl:grid-cols-4 mb-10">
             {products.map((product) => (
               <li key={product.id}>
@@ -50,10 +75,14 @@ const MedicinePage = async ({
             ))}
           </ul>
         ) : (
-          "Products not found"
+          <p className="font-[600] text-[24px] leading-[30px] mb-10 ">
+            Products not found
+          </p>
         )}
       </>
-      <Pagination count={count} take={PRODUCTS_PER_PAGE} />
+      {products.length >= PRODUCTS_PER_PAGE && (
+        <Pagination count={count} take={PRODUCTS_PER_PAGE} />
+      )}
     </div>
   );
 };

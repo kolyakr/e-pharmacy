@@ -91,3 +91,5 @@ export const productCategory = [
   "Dental Care",
   "Skin Care",
 ];
+
+export const fallbackImg = "https://i.ibb.co/bLKP624/5-15-1000x1000-min.jpg";
