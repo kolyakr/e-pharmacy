@@ -1,7 +1,7 @@
 "use client";
 
 import { links, linksName } from "@/constants";
-import { cn } from "@/lib/utils";
+import { cn, slicePathname } from "@/lib/utils";
 import Link from "next/link";
 import React from "react";
 import styles from "./header.module.css";
@@ -11,7 +11,7 @@ import { SheetClose } from "@/components/ui/sheet";
 type Type = "row" | "column";
 
 const HeaderNav = ({ type }: { type: Type }) => {
-  const pathname = usePathname();
+  const pathname = slicePathname(usePathname());
 
   return (
     <>

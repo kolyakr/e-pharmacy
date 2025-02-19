@@ -1,6 +1,6 @@
 import Pagination from "@/components/pagination";
 import MedicineFilter from "@/components/shared/medicine/medicine-filter";
-import MedicineProduct from "@/components/shared/medicine/medicine-product";
+import MedicineProduct from "@/components/shared/product/medicine-product";
 import { PRODUCTS_PER_PAGE } from "@/constants";
 import prisma from "@/db/db";
 import { parseFilterParams, parsePaginationParams } from "@/lib/utils";

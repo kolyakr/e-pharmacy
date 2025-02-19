@@ -117,6 +117,8 @@ model Product {
   stock     Int
   price     Decimal
   category  String
+
+  reviews Review[]
 }
 
 model IncomeExpense {
@@ -139,7 +141,10 @@ model Review {
   id          String   @id @default(cuid())
   name        String
   testimonial String
+  stars       Int      @default(5)
   createdAt   DateTime @default(now())
   customerId  String
   customer    Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  productId   String
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
 }

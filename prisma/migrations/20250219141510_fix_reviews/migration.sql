@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Review" ADD COLUMN     "stars" INTEGER NOT NULL DEFAULT 5;

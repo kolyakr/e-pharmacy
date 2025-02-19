@@ -75,7 +75,11 @@ export const parseFilterParams = (category: unknown, name: unknown) => {
   let parsedName = null;
 
   if (category && typeof category === "string") {
-    parsedCategory = productCategory.includes(category) ? category : null;
+    parsedCategory = productCategory
+      .map((product) => product.name)
+      .includes(category)
+      ? category
+      : null;
   }
 
   if (name && typeof name === "string") {
@@ -86,4 +90,10 @@ export const parseFilterParams = (category: unknown, name: unknown) => {
     name: parsedName,
     category: parsedCategory,
   };
+};
+
+export const slicePathname = (pathname: string) => {
+  const endIndex = pathname.slice(1).indexOf("/");
+
+  return endIndex === -1 ? pathname : pathname.slice(0, endIndex + 1);
 };

@@ -32,7 +32,10 @@ const MedicineFilter = () => {
   const handleFilter = () => {
     const params = new URLSearchParams(searchParams.toString());
 
-    if (currCategory && productCategory.includes(currCategory)) {
+    if (
+      currCategory &&
+      productCategory.map((product) => product.name).includes(currCategory)
+    ) {
       params.set("category", currCategory);
     } else {
       params.delete("category");
@@ -65,11 +68,13 @@ const MedicineFilter = () => {
         <DropdownMenuContent>
           {productCategory.map((product) => (
             <DropdownMenuItem
-              key={product}
-              onSelect={() => setCurrCategory(product)}
-              className={`${product === currCategory ? "text-greenColor" : ""}`}
+              key={product.name}
+              onSelect={() => setCurrCategory(product.name)}
+              className={`${
+                product.name === currCategory ? "text-greenColor" : ""
+              }`}
             >
-              {product}
+              {product.name}
             </DropdownMenuItem>
           ))}
           <DropdownMenuItem onClick={() => setCurrCategory(null)}>

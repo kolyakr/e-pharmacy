@@ -39,7 +39,7 @@ const MedicineProduct = ({ product }: { product: Product }) => {
           </Button>
           <Link
             className="font-[400] text-[12px] leading-[18px] underline"
-            href={`/`}
+            href={`medicine/product/${product.id}`}
           >
             Details
           </Link>
