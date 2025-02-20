@@ -1,11 +1,18 @@
-import Ellipsis from "@/components/ellipsis";
-import { Button } from "@/components/ui/button";
+import { auth } from "@/lib/auth";
+import { getCart } from "@/lib/cart";
 import { Product } from "@/types";
-import Image from "next/image";
-import Link from "next/link";
 import React from "react";
+import Image from "next/image";
+import Ellipsis from "@/components/ellipsis";
+import Link from "next/link";
+import AddToCart from "./add-to-cart";
+import { convertToPlainObject } from "@/lib/utils";
 
-const MedicineProduct = ({ product }: { product: Product }) => {
+const MedicineProduct = async ({ product }: { product: Product }) => {
+  const session = await auth();
+
+  const cart = await getCart(session?.user);
+
   return (
     <div className="flex flex-col justify-between gap-2 max-w-[335px] xl:max-w-[280px]">
       <div>
@@ -34,9 +41,11 @@ const MedicineProduct = ({ product }: { product: Product }) => {
           </p>
         </div>
         <div className="flex align-center justify-between">
-          <Button className="py-[10px] px-4 text-whiteColor bg-greenColor font-[500] text-[14px] leading-[14px] rounded-[24px]">
-            Add to cart
-          </Button>
+          <AddToCart
+            type="medicine"
+            product={convertToPlainObject(product)}
+            cart={convertToPlainObject(cart)}
+          />
           <Link
             className="font-[400] text-[12px] leading-[18px] underline"
             href={`medicine/product/${product.id}`}

@@ -35,6 +35,12 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           throw new Error("Invalid credentials");
         }
 
+        // const customer = await prisma.customer.findUnique({
+        //   where: {
+        //     userId: user.id,
+        //   },
+        // });
+
         return {
           id: user.id,
           email: user.email,

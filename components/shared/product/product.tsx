@@ -1,8 +1,16 @@
 import { Product as ProductType } from "@/types";
 import Image from "next/image";
 import React from "react";
+import AddToCart from "./add-to-cart";
+import { auth } from "@/lib/auth";
+import { getCart } from "@/lib/cart";
+import { convertToPlainObject } from "@/lib/utils";
 
-const Product = ({ product }: { product: ProductType }) => {
+const Product = async ({ product }: { product: ProductType }) => {
+  const session = await auth();
+
+  const cart = await getCart(session?.user);
+
   return (
     <div className="w-full flex flex-col gap-2 md:flex-row md:gap-4 md:max-h-[284px] md:h-full xl:flex-col xl:max-h-[709px] xl:w-[364px]">
       <div className="flex justify-center w-full md:max-w-[364px] p-5 rounded-[27px] border border-greenColor">
@@ -28,20 +36,11 @@ const Product = ({ product }: { product: ProductType }) => {
             ৳{product.price}
           </p>
         </div>
-        <div className="flex justify-between items-center">
-          <div className="py-3 px-[18px] border border-[#1D1E211A] flex justify-around items-center w-full max-w-[108px] rounded-[60px]">
-            <div className="text-greenColor text-[20px] leading-[20px] cursor-pointer">
-              +
-            </div>
-            <p>1</p>
-            <div className="text-greenColor text-[20px] leading-[20px] cursor-pointer">
-              -
-            </div>
-          </div>
-          <button className="py-[13px] px-[32px] bg-greenColor rounded-[60px] font-[500] text-[14px] leading-[18px] text-whiteColor">
-            Add to cart
-          </button>
-        </div>
+        <AddToCart
+          type="product"
+          product={convertToPlainObject(product)}
+          cart={convertToPlainObject(cart)}
+        />
       </div>
     </div>
   );

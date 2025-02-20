@@ -1,4 +1,5 @@
 import prisma from "@/db/db";
+import { formatDate } from "@/lib/utils";
 import Image from "next/image";
 import React from "react";
 
@@ -28,7 +29,7 @@ const ProductReviews = async ({ productId }: { productId: string }) => {
                       {review.name}
                     </p>
                     <p className="text-[#1D1E2199] font-[400] text-[12px] leading-[18px]">
-                      {review.createdAt.getTime()}
+                      {formatDate(review.createdAt)}
                     </p>
                   </div>
                 </div>

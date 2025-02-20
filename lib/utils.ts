@@ -97,3 +97,24 @@ export const slicePathname = (pathname: string) => {
 
   return endIndex === -1 ? pathname : pathname.slice(0, endIndex + 1);
 };
+
+export const formatDate = (date: Date) => {
+  const currDate = new Date();
+  const dateDiff = Math.floor(
+    (currDate.getTime() - date.getTime()) / (1000 * 60 * 60 * 24)
+  );
+
+  if (dateDiff === 0) return "today";
+  if (dateDiff === 1) return "yesterday";
+  if (dateDiff < 31) return `${dateDiff} days ago`;
+
+  const months = Math.floor(dateDiff / 30.44);
+  if (months < 12) return `${months} months ago`;
+
+  const years = Math.floor(dateDiff / 365.25);
+  return `${years} ${years === 1 ? "year" : "years"} ago`;
+};
+
+export const convertToPlainObject = <T>(object: T): T => {
+  return JSON.parse(JSON.stringify(object));
+};

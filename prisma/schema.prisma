@@ -38,6 +38,7 @@ model Customer {
   address      String?
   spent        Decimal  @default("0")
   registerDate DateTime @default(now())
+  cart         Cart?
 
   orders  Order[]
   reviews Review[]
@@ -118,7 +119,8 @@ model Product {
   price     Decimal
   category  String
 
-  reviews Review[]
+  reviews  Review[]
+  CartItem CartItems[]
 }
 
 model IncomeExpense {
@@ -147,4 +149,22 @@ model Review {
   customer    Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
   productId   String
   product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model Cart {
+  id         String      @id @default(cuid())
+  customerId String      @unique
+  Customer   Customer    @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  CartItems  CartItems[]
+}
+
+model CartItems {
+  id        String  @id @default(uuid())
+  productId String
+  Product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  cartId    String
+  Cart      Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  quantity  Int     @default(0)
+
+  @@unique([cartId, productId])
 }
