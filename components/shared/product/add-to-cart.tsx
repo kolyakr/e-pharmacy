@@ -7,7 +7,7 @@ import {
 import { Product } from "@/types";
 import React, { useState } from "react";
 
-type Type = "medicine" | "product";
+type Type = "medicine" | "product" | "cart";
 type Action = "increment" | "decrement";
 
 const AddToCart = ({
