@@ -14,6 +14,7 @@ const AddToCart = ({
   type = "medicine",
   product,
   cart,
+  deleteAction,
 }: {
   type: Type;
   product: Product;
@@ -30,6 +31,7 @@ const AddToCart = ({
         customerId: string;
       })
     | null;
+  deleteAction?: (productId: string) => void;
 }) => {
   const cartItem = cart?.CartItems.find(
     (item) => item.productId === product.id
@@ -68,6 +70,9 @@ const AddToCart = ({
       //module window
       throw new Error("not authorized");
     }
+    if (type === "cart" && deleteAction) {
+      deleteAction(product.id);
+    }
 
     await deleteProductFromCart(product.id, cart?.id);
     setIsInCart(false);
@@ -78,16 +83,32 @@ const AddToCart = ({
   }
 
   return (
-    <div className="flex justify-between items-center">
-      {type === "product" && (
-        <div className="py-3 px-[18px] border border-[#1D1E211A] flex justify-around items-center w-full max-w-[108px] rounded-[60px]">
+    <div
+      className={`flex justify-between ${
+        type === "cart" ? "gap-5 w-full items-end" : "items-center"
+      } `}
+    >
+      {(type === "product" || type === "cart") && (
+        <div
+          className={` ${
+            type === "cart"
+              ? "py-[7px] px-[14px] md:py-[12px] md:px-[18px] h-[32px] w-[95px] md:h-[44px] md:w-[108px]"
+              : "py-3 px-[18px]"
+          } border border-[#1D1E211A] flex justify-around items-center w-full max-w-[108px] rounded-[60px]`}
+        >
           <div
             onClick={() => handleQuantity("increment")}
             className="text-greenColor text-[20px] leading-[20px] cursor-pointer"
           >
             +
           </div>
-          <p>{quantity}</p>
+          <p
+            className={`${
+              type === "cart" ? "text-[14px] font-[400] leading-[20px]" : ""
+            }`}
+          >
+            {quantity}
+          </p>
           <div
             onClick={() => handleQuantity("decrement")}
             className="text-greenColor text-[20px] leading-[20px] cursor-pointer"
@@ -113,10 +134,10 @@ const AddToCart = ({
             type === "medicine"
               ? "py-[10px] px-4   leading-[14px] rounded-[24px]"
               : "py-[13px] px-[32px] rounded-[60px] leading-[18px]"
-          }  `}
+          }  ${type === "cart" ? "px-[12px] py-[7.5px] max-h-[33px]" : ""}`}
           onClick={handleDeleteFromCart}
         >
-          Delete
+          Remove
         </button>
       )}
     </div>

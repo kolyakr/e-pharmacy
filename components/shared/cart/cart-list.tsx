@@ -1,8 +1,7 @@
-import prisma from "@/db/db";
-import { auth } from "@/lib/auth";
-import { getCart } from "@/lib/cart";
+"use client";
+
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import AddToCart from "../product/add-to-cart";
 import { convertToPlainObject } from "@/lib/utils";
 
@@ -16,53 +15,79 @@ const defaultProduct = {
   price: 0,
 };
 
-const CartList = async () => {
-  const session = await auth();
+const CartList = ({
+  cart,
+  products,
+}: {
+  cart: {
+    CartItems: {
+      id: string;
+      productId: string;
+      cartId: string;
+      quantity: number;
+    }[];
+  } & {
+    id: string;
+    customerId: string;
+  };
+  products: ({
+    id: string;
+    name: string;
+    photo: string;
+    suppliers: string;
+    stock: number;
+    category: string;
+    price: number;
+  } | null)[];
+}) => {
+  const [productsList, setProductsList] = useState(products);
 
-  const cart = await getCart(session?.user);
+  const deleteFormProductsList = (productId: string) => {
+    setProductsList((prev) => {
+      return prev.filter((product) => product?.id !== productId);
+    });
+  };
 
-  if (!cart) {
-    throw new Error("not authorized");
-  }
-
-  const productsWithNulls = await Promise.all(
-    cart?.CartItems.map((item) =>
-      prisma.product.findUnique({
-        where: { id: item.productId },
-      })
-    ) || []
-  );
-
-  const products = productsWithNulls.filter(Boolean);
-
-  if (products.length === 0) {
+  if (productsList.length === 0) {
     return <p>Cart list is empty</p>;
   }
 
   return (
-    <ul>
-      {products.map((product) => (
-        <li key={product?.id}>
-          <div>
-            <Image
-              src="/images/white-round-pill.png"
-              alt="cart item image"
-              width={122}
-              height={133}
-            />
-          </div>
-          <div>
-            <div>
-              <div>
-                <p>{product?.name}</p>
-                <p>{product?.category}</p>
+    <ul className="flex flex-col gap-3 justify-center md:max-w-[704px]  xl:justify-start xl:w-full">
+      {productsList.map((product, index) => (
+        <li
+          className={`flex py-5 gap-3 ${
+            index !== products.length - 1 ? "border-b" : ""
+          }`}
+          key={product?.id}
+        >
+          <Image
+            src="/images/white-round-pill.png"
+            alt="cart item image"
+            width={122}
+            height={133}
+            className="w-full h-full max-w-[120px] max-h-[120px] md:max-w-[122px] md:max-h-[133px]"
+          />
+
+          <div className="flex flex-col gap-[18px] items-start w-full">
+            <div className="flex flex-col gap-3 md:flex-row md:justify-between md:w-full">
+              <div className="flex flex-col gap-2">
+                <p className="font-[600] text-[16px] leading-[22px] md:text-[18px] md:leading-[25px] ">
+                  {product?.name}
+                </p>
+                <p className="text-[#6A6A6F] font-[400] text-[12px] leading-[14px] md:text-[14px] md:leading-[18px]">
+                  {product?.category}
+                </p>
               </div>
-              <p>৳{product?.price}</p>
+              <p className="font-[500] text-[12px] leading-[14px] md:text-[14px] md:leading-[18px]">
+                ৳{product?.price}
+              </p>
             </div>
             <AddToCart
               type="cart"
               cart={convertToPlainObject(cart)}
               product={convertToPlainObject(product) || defaultProduct}
+              deleteAction={deleteFormProductsList}
             />
           </div>
         </li>

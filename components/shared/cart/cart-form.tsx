@@ -27,7 +27,7 @@ const FormSectionHeader = ({
 
 const CartForm = () => {
   return (
-    <form className="p-5 md:py-10 md:px-[78px] border rounded-[27px] flex flex-col md:max-w-[704px] xl:max-w-[628px]">
+    <form className="p-5 md:py-10 md:px-[78px] border rounded-[27px] flex flex-col md:max-w-[704px] xl:max-w-[628px] xl:max-h-[913px]">
       <div className="border-b pb-10">
         <FormSectionHeader
           className="mb-10"
