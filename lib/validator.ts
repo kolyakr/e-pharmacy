@@ -17,3 +17,11 @@ export const registerUserSchema = loginUserSchema.extend({
     .string()
     .regex(/^\+\d{1,3}\d{7,14}$/, "Invalid phone number format"),
 });
+
+export const placeOrderSchema = z.object({
+  name: z.string().min(3, "Name is required"),
+  email: z.string().email("Invalid email format"),
+  payment_method: z.enum(["CASH_ON_DELIVERY", "BANK"]),
+  address: z.string().min(1, "Address is required"),
+  phone: z.string().regex(/^\+\d{1,3}\d{7,14}$/, "Invalid phone number format"),
+});

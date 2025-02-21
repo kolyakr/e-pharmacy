@@ -11,3 +11,14 @@ export interface Product {
   stock: number;
   price: number;
 }
+
+export interface Cart {
+  id: string;
+  customerId: string;
+  CartItems: {
+    id: string;
+    productId: string;
+    cartId: string;
+    quantity: number;
+  }[];
+}

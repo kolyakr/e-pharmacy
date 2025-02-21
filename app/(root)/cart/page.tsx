@@ -32,7 +32,10 @@ const CartPage = async () => {
   return (
     <div className="wrapper">
       <div className="flex flex-col gap-20 xl:flex-row xl:justify-between xl:gap-[96px]">
-        <CartForm />
+        <CartForm
+          cart={convertToPlainObject(cart)}
+          products={convertToPlainObject(products)}
+        />
         <CartList
           cart={convertToPlainObject(cart)}
           products={convertToPlainObject(products)}

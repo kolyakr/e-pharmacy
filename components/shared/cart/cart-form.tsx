@@ -1,8 +1,15 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { cn } from "@/lib/utils";
-import React from "react";
+import { INITIAL_ACTION_STATE } from "@/constants";
+import { toast } from "@/hooks/use-toast";
+import { placeOrder } from "@/lib/actions/order.actions";
+import { calcCartPrice, cn } from "@/lib/utils";
+import { Cart, Product } from "@/types";
+import React, { useActionState, useEffect } from "react";
+import { useFormStatus } from "react-dom";
 
 const FormSectionHeader = ({
   title,
@@ -25,9 +32,51 @@ const FormSectionHeader = ({
   );
 };
 
-const CartForm = () => {
+const SubmitButton = () => {
+  const { pending } = useFormStatus();
+
   return (
-    <form className="p-5 md:py-10 md:px-[78px] border rounded-[27px] flex flex-col md:max-w-[704px] xl:max-w-[628px] xl:max-h-[913px]">
+    <Button
+      disabled={pending}
+      type="submit"
+      className="py-[13px] px-[32px] bg-greenColor text-whiteColor font-[500] text-[14px] leading-[18px] max-w-[141px] rounded-[60px]"
+    >
+      {pending ? "Processing..." : "Place order"}
+    </Button>
+  );
+};
+
+const CartForm = ({
+  cart,
+  products,
+}: {
+  cart: Cart;
+  products: (Product | null)[];
+}) => {
+  const [state, action] = useActionState(placeOrder, INITIAL_ACTION_STATE);
+
+  useEffect(() => {
+    if (state.success === true) {
+      toast({
+        title: state.message,
+        variant: "default",
+      });
+    } else if (state.success === false && state.message !== "") {
+      toast({
+        title: "Failed to place order",
+        description: state.message,
+        variant: "destructive",
+      });
+    }
+  }, [state]);
+
+  const total = calcCartPrice(cart, products);
+
+  return (
+    <form
+      action={action}
+      className="p-5 md:py-10 md:px-[78px] border rounded-[27px] flex flex-col md:max-w-[704px] xl:max-w-[628px] xl:max-h-[913px]"
+    >
       <div className="border-b pb-10">
         <FormSectionHeader
           className="mb-10"
@@ -44,6 +93,7 @@ const CartForm = () => {
               Name
             </label>
             <input
+              required
               className="max-w-[295px] md:max-w-[260px] py-[13px] px-[18px] border rounded-[60px] font-[400] text-[12px] leading-[18px] text-[#1D1E2199]"
               type="text"
               id="name"
@@ -59,6 +109,7 @@ const CartForm = () => {
               Email
             </label>
             <input
+              required
               className="max-w-[295px] md:max-w-[260px] py-[13px] px-[18px] border rounded-[60px] font-[400] text-[12px] leading-[18px] text-[#1D1E2199]"
               type="text"
               id="email"
@@ -74,6 +125,7 @@ const CartForm = () => {
               Phone
             </label>
             <input
+              required
               className="max-w-[295px] md:max-w-[260px] py-[13px] px-[18px] border rounded-[60px] font-[400] text-[12px] leading-[18px] text-[#1D1E2199]"
               type="text"
               id="phone"
@@ -89,6 +141,7 @@ const CartForm = () => {
               Address
             </label>
             <input
+              required
               className="max-w-[295px] md:max-w-[260px] py-[13px] px-[18px] border rounded-[60px] font-[400] text-[12px] leading-[18px] text-[#1D1E2199]"
               type="text"
               id="address"
@@ -105,11 +158,15 @@ const CartForm = () => {
           title="Payment method"
           description="You can pay us in a multiple way in our payment gateway system."
         />
-        <RadioGroup defaultValue="option-one" className="flex flex-col gap-2">
+        <RadioGroup
+          name="payment_method"
+          defaultValue="option-one"
+          className="flex flex-col gap-2"
+        >
           <div className="flex items-center gap-2">
             <RadioGroupItem
               className="bg-white text-greenColor border border-greenColor w-[20px] h-[20px] p-0"
-              value="option-one"
+              value="CASH_ON_DELIVERY"
               id="option-one"
             />
             <Label
@@ -122,7 +179,7 @@ const CartForm = () => {
           <div className="flex items-center gap-2">
             <RadioGroupItem
               className="bg-white text-greenColor border border-greenColor w-[20px] h-[20px] p-0"
-              value="option-two"
+              value="BANK"
               id="option-two"
             />
             <Label
@@ -144,11 +201,9 @@ const CartForm = () => {
         />
         <div className="p-5 bg-greenWhiteColor font-[600] text-[18px] leading-[25px] flex justify-between w-full rounded-[8px] mb-5">
           <p>Total:</p>
-          <p>৳ 122.00</p>
+          <p>৳ {total}</p>
         </div>
-        <Button className="py-[13px] px-[32px] bg-greenColor text-whiteColor font-[500] text-[14px] leading-[18px] max-w-[141px] rounded-[60px]">
-          Place order
-        </Button>
+        <SubmitButton />
       </div>
     </form>
   );

@@ -1,5 +1,5 @@
 import { PAGINATION_VISIBLE_BUTTONS, productCategory } from "@/constants";
-import { PaginationParams } from "@/types";
+import { Cart, PaginationParams, Product } from "@/types";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -117,4 +117,13 @@ export const formatDate = (date: Date) => {
 
 export const convertToPlainObject = <T>(object: T): T => {
   return JSON.parse(JSON.stringify(object));
+};
+
+export const calcCartPrice = (cart: Cart, products: (Product | null)[]) => {
+  return cart.CartItems.reduce((acc, item) => {
+    const price = products.find(
+      (product) => product?.id === item.productId
+    )?.price;
+    return acc + item.quantity * (price ?? 1);
+  }, 0).toFixed(2);
 };

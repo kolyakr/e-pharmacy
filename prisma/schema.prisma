@@ -13,6 +13,21 @@ enum Role {
   CUSTOMER
 }
 
+enum PaymentMethod {
+  CASH_ON_DELIVERY @map("cash on delivery")
+  BANK             @map("bank")
+}
+
+enum OrderStatus {
+  COMPLETED  @map("Completed")
+  CONFIRMED  @map("Confirmed")
+  PENDING    @map("Pending")
+  CANCELLED  @map("Cancelled")
+  PROCESSING @map("Processing")
+  SHIPPED    @map("Shipped")
+  DELIVERED  @map("Delivered")
+}
+
 model User {
   id          String  @id @default(cuid())
   name        String
@@ -96,14 +111,17 @@ model Supplier {
 }
 
 model Order {
-  id         String   @id @default(cuid())
-  name       String
-  address    String
-  products   Int
-  photo      String?
-  price      Decimal
-  status     String
-  order_date DateTime
+  id             String        @id @default(cuid())
+  name           String
+  email          String
+  payment_method PaymentMethod
+  address        String
+  products       Int
+  photo          String?
+  phone          String
+  price          Decimal
+  status         OrderStatus
+  order_date     DateTime      @default(now())
 
   customerId String?
   Customer   Customer? @relation(fields: [customerId], references: [id], onDelete: SetNull)

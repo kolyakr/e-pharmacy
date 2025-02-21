@@ -4,6 +4,7 @@ import Image from "next/image";
 import React, { useState } from "react";
 import AddToCart from "../product/add-to-cart";
 import { convertToPlainObject } from "@/lib/utils";
+import { Cart, Product } from "@/types";
 
 const defaultProduct = {
   id: "",
@@ -19,26 +20,8 @@ const CartList = ({
   cart,
   products,
 }: {
-  cart: {
-    CartItems: {
-      id: string;
-      productId: string;
-      cartId: string;
-      quantity: number;
-    }[];
-  } & {
-    id: string;
-    customerId: string;
-  };
-  products: ({
-    id: string;
-    name: string;
-    photo: string;
-    suppliers: string;
-    stock: number;
-    category: string;
-    price: number;
-  } | null)[];
+  cart: Cart;
+  products: (Product | null)[];
 }) => {
   const [productsList, setProductsList] = useState(products);
 
