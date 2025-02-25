@@ -3,11 +3,20 @@ import { NEAREST_PHARMACIES_LIMIT } from "@/constants";
 import prisma from "@/db/db";
 import React from "react";
 import SectionHeader from "./section-header";
+import { unstable_cache } from "next/cache";
+
+const getNearestPharmacies = unstable_cache(
+  async () => {
+    return await prisma.pharmacy.findMany({
+      take: NEAREST_PHARMACIES_LIMIT,
+    });
+  },
+  ["nearest-pharmacies"],
+  { revalidate: 60 * 60 }
+);
 
 const MedicineStores = async () => {
-  const nearestPharmacies = await prisma.pharmacy.findMany({
-    take: NEAREST_PHARMACIES_LIMIT,
-  });
+  const nearestPharmacies = await getNearestPharmacies();
 
   return (
     <div className="flex flex-col gap-[40px] mb-[80px]">

@@ -5,6 +5,7 @@ import {
   deleteProductFromCart,
 } from "@/lib/actions/product.actions";
 import { Product } from "@/types";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 type Type = "medicine" | "product" | "cart";
@@ -33,6 +34,7 @@ const AddToCart = ({
     | null;
   deleteAction?: (productId: string) => void;
 }) => {
+  const router = useRouter();
   const cartItem = cart?.CartItems.find(
     (item) => item.productId === product.id
   );
@@ -55,13 +57,12 @@ const AddToCart = ({
 
   const handleAddToCart = async (isInCartQuantity: number | void) => {
     if (!cart) {
-      //module window
-      throw new Error("not authorized");
+      router.push("/register");
     }
 
     const stock = isInCartQuantity === undefined ? quantity : isInCartQuantity;
 
-    await addProductToCart(product.id, cart?.id, stock);
+    await addProductToCart(product.id, cart?.id || "", stock);
     setIsInCart(true);
   };
 

@@ -6,7 +6,7 @@ import { auth } from "../auth";
 import { getCart } from "../cart";
 import prisma from "@/db/db";
 import { calcCartPrice, formatError } from "../utils";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 export const placeOrder = async (
   previousState: unknown,
@@ -66,6 +66,7 @@ export const placeOrder = async (
       )
     );
 
+    revalidateTag("cart-products");
     revalidatePath("/");
 
     return {

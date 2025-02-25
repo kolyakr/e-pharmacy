@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "@/assets/styles/global.css";
+import "@/assets/styles/globals.css";
 import { APP_DESCRIPTION, APP_NAME } from "@/constants";
 import { Toaster } from "@/components/ui/toaster";
 
@@ -18,6 +18,7 @@ export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
+  modal: React.ReactNode;
 }>) {
   return (
     <html lang="en">

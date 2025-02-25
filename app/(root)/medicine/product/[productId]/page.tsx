@@ -2,6 +2,7 @@ import Product from "@/components/shared/product/product";
 import ProductDetails from "@/components/shared/product/product-details";
 import ProductReviews from "@/components/shared/product/product-reviews";
 import prisma from "@/db/db";
+import { unstable_cache } from "next/cache";
 import React from "react";
 
 const ProductDetailsPage = async ({
@@ -11,11 +12,21 @@ const ProductDetailsPage = async ({
 }) => {
   const { productId } = await params;
 
-  const product = await prisma.product.findUnique({
-    where: {
-      id: productId,
+  const productData = unstable_cache(
+    async () => {
+      return await prisma.product.findUnique({
+        where: {
+          id: productId,
+        },
+      });
     },
-  });
+    [productId],
+    {
+      revalidate: 60,
+    }
+  );
+
+  const product = await productData();
 
   if (!product) {
     return <p>Not found</p>;
